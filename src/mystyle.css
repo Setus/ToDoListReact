@@ -1,0 +1,93 @@
+* {
+    box-sizing: border-box;
+  }
+
+:root {
+    --fieldSize: 300px;
+    --itemHeight: 30px;
+}
+
+.backgroundStyle {
+    background-color: powderblue;
+}
+
+.h1Style {
+    color: black;
+    text-align: center;
+    padding-top: 40px;
+    margin: 0px;
+}
+
+.newItemStyle {
+    margin-top: 50px;
+    margin-left: 43.5%;
+    /* justify-content: center; */
+    display: flex;
+    /* border: 1px rgb(237, 16, 230) solid; */
+    /* height: 80px; */
+}
+
+.newItemInputFieldStyle {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: var(--fieldSize);
+    height: var(--itemHeight);
+    /* border: 1px rgb(10, 254, 47) solid; */
+    /* height: 30px; */
+}
+
+.inputFieldEditStyle {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: var(--fieldSize);
+    height: var(--itemHeight);
+}
+
+.buttonStyle {
+    /* display: inline-block; */
+    /* border: 1px rgb(237, 16, 16) solid; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 60px;
+    height: var(--itemHeight);
+}
+
+.deleteAllDoneButtonStyle {
+    /* display: inline-block; */
+    /* border: 1px rgb(237, 16, 16) solid; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 120px;
+    height: var(--itemHeight);
+}
+
+.listStyle {
+    /* border: 1px rgb(237, 16, 16) solid; */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 25%;
+    margin-left: 42%;
+}
+
+.itemSize {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 6px;
+    width: var(--fieldSize);
+    height: var(--itemHeight);
+    /* outline: 1px rgb(33, 191, 33) solid; */
+}
+  
+.itemBox {
+    display: flex;
+    justify-content: left;
+    /* outline: 1px blue solid; */
+    /* height: 50px; */
+}
+
+.footerStyle {
+    padding: 500px;
+
+}
