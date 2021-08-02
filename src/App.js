@@ -7,7 +7,7 @@ import Footer from './components/Footer';
 class App extends React.Component {
   
   baseUrl = "https://localhost:50294/api/item/";
-  getUrl = this.baseUrl + "get";
+  getUrl = this.baseUrl + "getall";
   createUrl = this.baseUrl + "create";
   updateUrl = this.baseUrl + "update";
   deleteUrl = this.baseUrl + "delete";
