@@ -1,6 +1,9 @@
 import React from 'react';
+import ItemService from '../ItemService';
 
-class Item extends React.Component {
+class ItemComponent extends React.Component {
+
+    itemService;
 
     constructor() {
         super();
@@ -8,6 +11,10 @@ class Item extends React.Component {
             editing: false,
             newItemName: ''
         }
+    }
+
+    componentDidMount() {
+        this.itemService = new ItemService(this.props.importedState);
     }
 
     outputItemName = () => {
@@ -54,7 +61,7 @@ class Item extends React.Component {
     }
 
     setItemToDone = () => {
-        this.props.updateItemInState({itemId: this.props.itemId, itemName: this.props.itemName, done: !this.props.done});
+        this.itemService.updateItemInState({itemId: this.props.itemId, itemName: this.props.itemName, done: !this.props.done});
     }
 
     editItem = () => {
@@ -81,7 +88,7 @@ class Item extends React.Component {
         if (this.state.newItemName !== undefined && this.state.newItemName !== '' && this.state.newItemName.trim() !== '') {
             // let newItem = {itemId: this.props.itemId, itemName: this.state.newItemName, done: this.props.done};
             // console.log("The new item is:" + newItem.itemName);
-            this.props.updateItemInState({itemId: this.props.itemId, itemName: this.state.newItemName, done: this.props.done});
+            this.itemService.updateItemInState({itemId: this.props.itemId, itemName: this.state.newItemName, done: this.props.done});
             // this.setState({newItemName: ''});
             this.setState({editing: false, newItemName: ''});
         }
@@ -89,9 +96,9 @@ class Item extends React.Component {
 
     deleteItem = (event) => {
         event.preventDefault();
-        this.props.deleteItemFromState({itemId: this.props.itemId, itemName: this.props.itemName, done: this.props.done});
+        this.itemService.deleteItemFromState({itemId: this.props.itemId, itemName: this.props.itemName, done: this.props.done});
     }
 
 }
 
-export default Item;
+export default ItemComponent;

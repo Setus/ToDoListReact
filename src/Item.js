@@ -1,10 +1,10 @@
 class Item {
 
-    itemId: number;
-    itemName: string;
-    done: boolean;
+    itemId;
+    itemName;
+    done;
 
-    constructor(itemId: number, itemName : string, done: boolean) {
+    constructor(itemId, itemName, done) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.done = done;
@@ -14,7 +14,7 @@ class Item {
         return this.itemId;
     }
 
-    set ItemId(itemId : number) {
+    set ItemId(itemId) {
         this.ItemId = this.itemId
     }
 
@@ -22,7 +22,7 @@ class Item {
         return this.itemName;
     }
 
-    set ItemName(newItemName : string) {
+    set ItemName(newItemName) {
         this.itemName = newItemName;
     }
 
@@ -30,7 +30,7 @@ class Item {
         return this.done;
     }
 
-    set Done(newDone : boolean) {
+    set Done(newDone) {
         this.done = newDone;
     }
 

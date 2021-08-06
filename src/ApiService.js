@@ -8,25 +8,19 @@ class ApiService {
     deleteUrl = this.baseUrl + "delete";
     deleteAllDoneUrl = this.baseUrl + "deletealldone";
 
-    testMethod = (importedState) => {
-      console.log("WTFFFFFF?!");
-      console.log(importedState);
-      importedState.itemsList.push({itemId: 100, itemName: "BABY", done: false});
-    }
-
-    callGetAPI = () => {
+    callGetAPI = (importedState) => {
         fetch(this.getUrl)
           .then(results => results.json())
           .then(
             (results) => {
               if (results == null) {
-                this.setState(
+                importedState.setState(
                   { 
                     itemsList: [],
                     isLoaded: true
                   });
               } else {
-                this.setState(
+                importedState.setState(
                   { 
                     itemsList: results,
                     isLoaded: true
@@ -34,15 +28,14 @@ class ApiService {
               }
           },
             (error) => {
-              this.setState({
+              importedState.setState({
                 isLoaded: true,
                 error: error
             });
           });
       }
     
-      callCreateAPI = () => {
-        let newItem = this.state.itemsList[this.state.itemsList.length - 1];
+      callCreateAPI = (newItem) => {
         this.performFetchRequest('POST', newItem, this.createUrl);
       }
     

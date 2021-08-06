@@ -1,10 +1,17 @@
 import React from 'react';
+import ItemService from '../ItemService';
 
-class Adder extends React.Component {
+class AdderComponent extends React.Component {
+
+    itemService
 
     constructor() {
         super();
         this.state = {newItemName: ''}
+    }
+
+    componentDidMount() {
+        this.itemService = new ItemService(this.props.importedState);
     }
 
     render() {
@@ -27,7 +34,7 @@ class Adder extends React.Component {
     handleSubmit = (event) => {
         event.preventDefault();
         if (this.state.newItemName !== undefined && this.state.newItemName !== '' && this.state.newItemName.trim() !== '') {
-            this.props.addNewItemToState(this.state.newItemName);
+            this.itemService.addNewItemToState(this.state.newItemName);
             this.setState({newItemName: ''});
         }
     }
@@ -35,11 +42,11 @@ class Adder extends React.Component {
     deleteAllDone = (event) => {
         // console.log("Clicked on Delete all");
         event.preventDefault();
-        this.props.deleteAllDoneFromState();
+        this.itemService.deleteAllDoneFromState();
     }
 
 
 
 }
 
-export default Adder;
+export default AdderComponent;

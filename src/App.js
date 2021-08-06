@@ -1,19 +1,14 @@
 import React from 'react';
 import './mystyle.css';
-import Item from './components/Item';
-import Adder from './components/Adder';
-import ApiService from './ApiService';
+import ItemComponent from './components/ItemComponent';
+import AdderComponent from './components/AdderComponent';
+import ItemService from './ItemService';
+import PageState from './PageState';
 
 class App extends React.Component {
   
-  baseUrl = "https://localhost:50294/api/item/";
-  getUrl = this.baseUrl + "getall";
-  createUrl = this.baseUrl + "create";
-  updateUrl = this.baseUrl + "update";
-  deleteUrl = this.baseUrl + "delete";
-  deleteAllDoneUrl = this.baseUrl + "deletealldone";
-
-  apiService;
+  itemService;
+  pageState;
 
   constructor() {
     super();
@@ -25,65 +20,14 @@ class App extends React.Component {
       isLoaded: false,
       error: null
     }
+    // this.pageState = new PageState([], false, null);
+    // this.state = this.pageState;
 
-    this.apiService = new ApiService();
+    this.itemService = new ItemService(this);
   }
 
   componentDidMount() {
-    this.callGetAPI();
-  }
-
-
-  addNewItemToState = (newItemName) => {
-    let biggestItemId = -1;
-    if (this.state.itemsList.length > 0) {
-      this.state.itemsList.forEach((value) => {
-        if (value.itemId > biggestItemId) {
-          biggestItemId = value.itemId;
-        }
-      });
-    }
-
-    console.log("Biggest item id in current list: " + biggestItemId);
-
-    this.setState(prevState => {
-      let newItemList = [...prevState.itemsList];
-      newItemList.push({itemId: biggestItemId + 1, itemName: newItemName, done: false});
-      return {itemsList: newItemList}
-    }, () => {this.callCreateAPI(this.state.itemsList[this.state.itemsList.length - 1])}
-    );
-  }
-
-  updateItemInState = (updatedItem) => {
-    this.setState(prevState => {
-      let newItemList = [...prevState.itemsList];
-      let oldItemIndex = newItemList.findIndex((value, index, array) => {
-        return value.itemId === updatedItem.itemId;
-      });
-      newItemList[oldItemIndex] = updatedItem;
-      return {itemsList: newItemList}
-    }, () => {this.callUpdateAPI(updatedItem)})
-  }
-
-  deleteItemFromState = (itemToDelete) => {
-    this.setState(prevState => {
-      let newItemList = [...prevState.itemsList];
-      let oldItemIndex = newItemList.findIndex((value, index, array) => {
-        return value.itemId === itemToDelete.itemId;
-      });
-      newItemList.splice(oldItemIndex, 1);
-      return {itemsList: newItemList}
-    }, () => {this.callDeleteAPI(itemToDelete)})
-  }
-
-  deleteAllDoneFromState = () => {
-    this.setState(prevState => {
-      let listCopy = [...prevState.itemsList];
-      let newItemList = listCopy.filter((value, index, array) => {
-        return value.done === false;
-      });
-      return {itemsList: newItemList}
-    }, () => {this.callDeleteAllDoneAPI()})
+    this.itemService.getAllItems();
   }
 
   render() {
@@ -105,21 +49,18 @@ class App extends React.Component {
         <div>
           <h1 className="h1Style">My to-do list</h1>
 
-          <Adder 
-            items={this.state} 
-            addNewItemToState={this.addNewItemToState} 
-            deleteAllDoneFromState={this.deleteAllDoneFromState}
+          <AdderComponent 
+            importedState={this}
           />
 
           <ul className="listStyle">
             {this.state.itemsList.map((item) => (
-              <Item 
+              <ItemComponent 
                 key={item.itemId} 
                 itemId={item.itemId} 
                 itemName={item.itemName} 
-                done={item.done} 
-                updateItemInState={this.updateItemInState}
-                deleteItemFromState={this.deleteItemFromState}
+                done={item.done}
+                importedState={this}
               />    
             ))}
           </ul>
@@ -127,69 +68,6 @@ class App extends React.Component {
       );
     }
   }
-
-  callGetAPI = () => {
-    fetch(this.getUrl)
-      .then(results => results.json())
-      .then(
-        (results) => {
-          if (results == null) {
-            this.setState(
-              { 
-                itemsList: [],
-                isLoaded: true
-              });
-          } else {
-            this.setState(
-              { 
-                itemsList: results,
-                isLoaded: true
-              });
-          }
-      },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error: error
-        });
-      });
-  }
-
-  callCreateAPI = (newItem) => {
-    this.performFetchRequest('POST', newItem, this.createUrl);
-  }
-
-  callUpdateAPI = (updatedItem) => {
-    this.performFetchRequest('POST', updatedItem, this.updateUrl);
-  }
-
-  callDeleteAPI = (deletedItem) => {
-    this.performFetchRequest('DELETE', deletedItem, this.deleteUrl)
-  }
-
-  callDeleteAllDoneAPI = () => {
-    this.performFetchRequest('DELETE', null, this.deleteAllDoneUrl)
-  }
-
-  performFetchRequest = (method, item, url) => {
-    const requestOptions = {
-      method: method,
-      headers: { 'Content-Type': 'application/json' },
-      body: item != null ? JSON.stringify(item) : null
-    };
-
-    console.log("Request body: " + requestOptions.body);
-
-    fetch(url, requestOptions)
-      .then(response => {
-        if (!response.ok) {
-          console.log("Error in response from API call");
-          console.log("Response status " + response.status);
-          console.log(response);
-        }
-    });
-  }
-
 }
 
 
