@@ -6,7 +6,7 @@ class ItemService {
     importedState;
 
     constructor(importedState) {
-        this.apiService = new ApiService();
+        this.apiService = new ApiService(importedState);
         this.importedState = importedState;
     }
 
