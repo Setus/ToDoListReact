@@ -2,13 +2,14 @@
     box-sizing: border-box;
   }
 
+body {
+    background-color: powderblue;
+
+}
+
 :root {
     --fieldSize: 300px;
     --itemHeight: 30px;
-}
-
-.backgroundStyle {
-    background-color: powderblue;
 }
 
 .h1Style {

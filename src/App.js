@@ -2,7 +2,7 @@ import React from 'react';
 import './mystyle.css';
 import Item from './components/Item';
 import Adder from './components/Adder';
-import Footer from './components/Footer';
+import ApiService from './ApiService';
 
 class App extends React.Component {
   
@@ -13,6 +13,7 @@ class App extends React.Component {
   deleteUrl = this.baseUrl + "delete";
   deleteAllDoneUrl = this.baseUrl + "deletealldone";
 
+  apiService;
 
   constructor() {
     super();
@@ -24,6 +25,8 @@ class App extends React.Component {
       isLoaded: false,
       error: null
     }
+
+    this.apiService = new ApiService();
   }
 
   componentDidMount() {
@@ -47,7 +50,7 @@ class App extends React.Component {
       let newItemList = [...prevState.itemsList];
       newItemList.push({itemId: biggestItemId + 1, itemName: newItemName, done: false});
       return {itemsList: newItemList}
-    }, () => {this.callCreateAPI()}
+    }, () => {this.callCreateAPI(this.state.itemsList[this.state.itemsList.length - 1])}
     );
   }
 
@@ -84,23 +87,22 @@ class App extends React.Component {
   }
 
   render() {
-    if (this.state.error) {
+    if (this.state.error && this.state.error.message === "Failed to fetch") {
       return (
-        <div className="backgroundStyle">
-          <h1 className="h1Style">Error: {this.state.error.message}</h1>        
-          <Footer />
+        <div>
+          <h1 className="h1Style">My to-do list</h1>
+          <h2 className="h1Style">Server is unavailable</h2>        
         </div>
         );
     } else if (!this.state.isLoaded) {
       return (
-        <div className="backgroundStyle">
+        <div>
           <h1 className="h1Style">Loading...</h1>
-          <Footer />
         </div>
       );
     } else {
       return (
-        <div className="backgroundStyle">
+        <div>
           <h1 className="h1Style">My to-do list</h1>
 
           <Adder 
@@ -121,7 +123,6 @@ class App extends React.Component {
               />    
             ))}
           </ul>
-          <Footer />
         </div>
       );
     }
@@ -154,8 +155,7 @@ class App extends React.Component {
       });
   }
 
-  callCreateAPI = () => {
-    let newItem = this.state.itemsList[this.state.itemsList.length - 1];
+  callCreateAPI = (newItem) => {
     this.performFetchRequest('POST', newItem, this.createUrl);
   }
 
