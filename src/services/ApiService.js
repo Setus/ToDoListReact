@@ -1,3 +1,4 @@
+import PageState from './../models/PageState';
 
 class ApiService {
 
@@ -19,27 +20,14 @@ class ApiService {
         .then(results => results.json())
         .then(
             (results) => {
-            if (results == null) {
-                this.importedState.setState(
-                { 
-                    itemsList: [],
-                    isLoaded: true
-                });
-            } else {
-                this.importedState.setState(
-                { 
-                    itemsList: results,
-                    isLoaded: true
-                });
-            }
-        },
-            (error) => {
-                this.importedState.setState(
-                {
-                    isLoaded: true,
-                    error: error
-                });
-        });
+                if (results == null) {
+                    this.importedState.setState(new PageState([], true, null));
+                } else {
+                    this.importedState.setState(new PageState(results, true, null));
+                }
+            },
+            (error) => {this.importedState.setState(new PageState([], true, error))}
+        );
     }
 
     callCreateAPI = (newItem) => {
@@ -60,9 +48,9 @@ class ApiService {
 
     performFetchRequest = (method, item, url) => {
         const requestOptions = {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: item != null ? JSON.stringify(item) : null
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: item != null ? JSON.stringify(item) : null
         };
 
         console.log("Request body: " + requestOptions.body);
@@ -76,12 +64,8 @@ class ApiService {
                     console.log(response);
                 }
             },
-            (error) => {
-                this.importedState.setState({
-                isLoaded: true,
-                error: error
-            });
-        });
+            (error) => {this.importedState.setState(new PageState([], true, error))}
+        );
     }
 
 }

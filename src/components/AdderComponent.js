@@ -1,5 +1,5 @@
 import React from 'react';
-import ItemService from '../ItemService';
+import ItemService from '../services/ItemService';
 
 class AdderComponent extends React.Component {
 
@@ -44,9 +44,6 @@ class AdderComponent extends React.Component {
         event.preventDefault();
         this.itemService.deleteAllDoneFromState();
     }
-
-
-
 }
 
 export default AdderComponent;

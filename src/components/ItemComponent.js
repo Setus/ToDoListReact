@@ -1,5 +1,6 @@
 import React from 'react';
-import ItemService from '../ItemService';
+import Item from '../models/Item';
+import ItemService from '../services/ItemService';
 
 class ItemComponent extends React.Component {
 
@@ -7,10 +8,7 @@ class ItemComponent extends React.Component {
 
     constructor() {
         super();
-        this.state = {
-            editing: false,
-            newItemName: ''
-        }
+        this.state = new ComponentState(false, '');
     }
 
     componentDidMount() {
@@ -61,25 +59,18 @@ class ItemComponent extends React.Component {
     }
 
     setItemToDone = () => {
-        this.itemService.updateItemInState({itemId: this.props.itemId, itemName: this.props.itemName, done: !this.props.done});
+        this.itemService.updateItemInState(new Item(this.props.itemId, this.props.itemName, !this.props.done));
     }
 
     editItem = () => {
         // console.log("Pressed on Edit button");
-        this.setState(prevState => {
-            return {editing: !prevState.editing};
-        });
+        this.setState(prevState => new ComponentState(!prevState.editing, null));
         // console.log("The editing state is: " + this.state.editing);
     }
 
     handleEditing = (event) => {
         event.preventDefault();       
-        this.setState(prevState => {
-            return {
-                editing: prevState.editing,
-                newItemName: event.target.value
-            }
-        }); 
+        this.setState(prevState => new ComponentState(prevState.editing, event.target.value)); 
     }
 
     handleSubmit = (event) => {
@@ -88,17 +79,27 @@ class ItemComponent extends React.Component {
         if (this.state.newItemName !== undefined && this.state.newItemName !== '' && this.state.newItemName.trim() !== '') {
             // let newItem = {itemId: this.props.itemId, itemName: this.state.newItemName, done: this.props.done};
             // console.log("The new item is:" + newItem.itemName);
-            this.itemService.updateItemInState({itemId: this.props.itemId, itemName: this.state.newItemName, done: this.props.done});
+            this.itemService.updateItemInState(new Item(this.props.itemId, this.state.newItemName, this.props.done));
             // this.setState({newItemName: ''});
-            this.setState({editing: false, newItemName: ''});
+            this.setState(new ComponentState(false, ''));
         }
     }
 
     deleteItem = (event) => {
         event.preventDefault();
-        this.itemService.deleteItemFromState({itemId: this.props.itemId, itemName: this.props.itemName, done: this.props.done});
+        this.itemService.deleteItemFromState(new Item(this.props.itemId, this.props.itemName, this.props.done));
     }
+}
 
+class ComponentState {
+
+    editing;
+    newItemName;
+
+    constructor(editing, newItemName) {
+        this.editing = editing;
+        this.newItemName = newItemName;
+    }
 }
 
 export default ItemComponent;
