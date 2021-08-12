@@ -2,7 +2,7 @@ import PageState from './../models/PageState';
 
 class ApiService {
 
-    baseUrl = "https://localhost:50294/api/item/";
+    baseUrl = "http://localhost:21561/api/item/";
     getUrl = this.baseUrl + "getall";
     createUrl = this.baseUrl + "create";
     updateUrl = this.baseUrl + "update";
